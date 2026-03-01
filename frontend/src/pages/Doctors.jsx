@@ -6,8 +6,6 @@ import { AppContext } from '../context/AppContext';
 const Doctors = () => {
 
   const { speciality } = useParams();
-  console.log(speciality);
-
   const { doctors } = useContext(AppContext);
   const navigate = useNavigate();
 
