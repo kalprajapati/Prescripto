@@ -9,9 +9,9 @@ const Navbar = () => {
   let [profile, setProfile] = useState(false)
   let [token, setToken] = useState(true)
   return (
-    <div className="flex items-center justify-between text-sm py-2 px-2 mb-6 mt-3  border-b border-gray-500">
+    <div className="flex items-center justify-between text-sm py-2 px-2 mb-6 mt-3 border-gray-500 shadow-md">
       <div className="flex items-center gap-2 ">
-        <img onClick={()=>{navigate('/')}} src={assets_frontend.logo} className='w-32 cursor-pointer' />
+        <img onClick={()=>{navigate('/ ')}} src={assets_frontend.logo} className='w-32 cursor-pointer' />
         
       </div>
 
@@ -49,7 +49,7 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
-            : <button onClick={() => navigate("/login")} className="bg-blue-400 text-white px-8 py-3 rounded-md text-sm cursor-pointer font-medium hidden md:block">create account</button>
+            : <button onClick={() => navigate("/login")} className="px-8 py-3 rounded-md text-sm cursor-pointer font-medium hidden md:block hover:bg-amber-400 hover:text-white border transition-all duration-200 ">LOGIN</button>
 
         }
 
