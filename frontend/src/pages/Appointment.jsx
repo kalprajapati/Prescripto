@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Footer from '../components/Footer'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext';
 import { assets_frontend } from '../assets/assets';
 const Appointment = () => {
-
   let { docID } = useParams();
   let { doctors, currencySymbol } = useContext(AppContext);
   let [docInfo, setDocInfo] = useState(null);
+
+  let [relativeDocs, setRelativeDocs] = useState();
+
+  let navigate = useNavigate();
 
   let [slots, setSlots] = useState();
   let [selectedDate, setSelectedDate] = useState();
@@ -21,6 +24,21 @@ const Appointment = () => {
     setDocInfo(docInfo);
     console.log(docInfo);
   }
+
+  let fetchRelativeDocs = async () => {
+    if (!docInfo) return;
+    let rDocs = await doctors.filter((doc) => (
+      doc.speciality === docInfo.speciality && doc._id !== docInfo._id
+
+    ))
+    setRelativeDocs(rDocs);
+  }
+
+  useEffect(() => {
+    fetchRelativeDocs();
+  }, [docInfo])
+
+  console.log(relativeDocs);
 
   let generateSlots = () => {
     let tempSlots = [];
@@ -47,7 +65,7 @@ const Appointment = () => {
       tempSlots.push(daySlots);
     }
     setSlots(tempSlots);
-    setSelectedTime(tempSlots[0].times[0] );
+    setSelectedTime(tempSlots[0].times[0]);
     setSelectedDate(tempSlots[0]);
   }
 
@@ -120,8 +138,8 @@ const Appointment = () => {
                 <button
                   key={index}
                   onClick={() => setSelectedTime(time)}
-                  className={`px-4 py-2 rounded-lg border border-gray-500
-                  ${selectedTime === time ? "bg-amber-400 text-white border-white shadow-md" : "text-gray-500"}`}
+                  className={`px-4 py-2 rounded-lg border border-gray-500 
+                  ${selectedTime === time ? "bg-amber-400 text-white border-white shadow-md" : "text-gray-500"} cursor-pointer`}
                 >
                   {time}
                 </button>
@@ -129,7 +147,34 @@ const Appointment = () => {
             </div>
             <button className='max-w-60 py-3 px-10 rounded-full bg-amber-400 text-white cursor-pointer '>Book Appointment</button>
           </div>
-          
+          <div className='flex flex-col justify-center items-center mt-8 gap-8 '>
+            <div className='flex  flex-col items-center gap-3'>
+              <h2 className='text-xl md:text-2xl font-semibold'>Related doctors</h2>
+              <p>Simply browse through our extensive list of Doctors</p>
+            </div>
+            <div className='min-w-2/3 flex justify-center flex-row'>
+              <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 gap-y-6 px-3 sm:px-0 '>
+                {
+                  relativeDocs?.map((item, index) => (
+                    <div onClick={() => { navigate(`/appointment/${item._id}`); scrollTo(0, 0) }} className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] duration-200 transition-all" key={index} >
+                      <img className="bg-blue-50  " src={item.image} />
+                      <div className='p-4'>
+                        <div className="flex gap-1.5 items-center " >
+                          <p className="h-2 w-2 bg-green-500 rounded-full"></p>
+                          <p className="text-green-500">Available</p>
+                        </div>
+
+                        <p className='text-gray-900 text-lg font-medium'>{item.name}</p>
+                        <p className='text-sm text-gray-500 font-medium'>{item.speciality}</p>
+                      </div>
+
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+
         </>
       ) : (
         <p >Loading</p>
