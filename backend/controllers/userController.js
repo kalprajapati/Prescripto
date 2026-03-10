@@ -2,6 +2,7 @@ import validator from 'validator'
 import bcrypt from 'bcrypt'
 import userModel from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
+import { v2 as cloudinary } from 'cloudinary'
 //API to register user
 
 const registerUser = async (req, res) => {
@@ -105,6 +106,60 @@ const loginUser = async (req, res) => {
     }
 }
 
+let getProfile = async (req, res) => {
+    try {
+        let userId = req.userId
 
+        const userData = await userModel.findById(userId).select('-password')
+        res.status(200).json({
+            success: true,
+            userData
+        })
 
-export { registerUser, loginUser }
+    } catch (err) {
+        console.log(err)
+        res.status(404).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+const updateProfile = async (req, res) => {
+    try {
+        const userId = req.userId
+        console.log(userId)
+        const { name, phone, address, dob, gender } = req.body
+        const imgFile = req.file
+        console.log(req.file)
+        console.log(req.body.image)
+        if (!name || !gender || !phone || !dob) {
+            return res.json({
+                success: false,
+                message: "fill all fields"
+            })
+        }
+
+        await userModel.findByIdAndUpdate(userId, { name, phone, address: JSON.parse(address), dob, gender })
+        if (imgFile) {
+            //upload img to cloudinary
+            const imageUpload = await cloudinary.uploader.upload(imgFile.path, { resource_type: 'image' })
+            console.log(imageUpload)
+            const imgUrl = imageUpload.secure_url;
+            await userModel.findByIdAndUpdate(userId, { image: imgUrl })
+        }
+        res.json({
+            success: true,
+            message: 'Profile updated'
+        })
+    } catch (err) {
+        console.log(err.message)
+        res.status(404).json({
+            success: false,
+            message: err.message
+        })
+    }
+
+}
+
+export { registerUser, loginUser, getProfile, updateProfile }
