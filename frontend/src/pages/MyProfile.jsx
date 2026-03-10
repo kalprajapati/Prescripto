@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
 import { assets_frontend } from '../assets/assets'
+import { AppContext } from '../context/AppContext';
+import axios from 'axios'
+import { useContext } from 'react';
+
 
 const MyProfile = () => {
   let [isEdit, setIsEdit] = useState(false);
-  let [userData, setUserData] = useState({
-    name: "kalp prajapati",
-    image: assets_frontend.profile_pic,
-    email: 'kalprajapati1803@gmail.com',
-    phone: '+91 9033090280',
-    address: {
-      line1: "N-2/A, NALANDA SOCIETY",
-      line2: "BHURAVAV ROAD, GODHRA"
+  const {userData, setUserData} = useContext(AppContext)
+  console.log(userData.image)
+  if(!userData){
+    return <p>Loading...!</p>
+  }
 
-    },
-    gender: "male",
-    dob: "2006-05-29"
-  })
   return (
 
     <div className='flex flex-col sm:flex-row gap-3 sm:gap-10 justify-center px-2 py-2'>

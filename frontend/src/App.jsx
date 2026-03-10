@@ -10,26 +10,31 @@ import MyAppointments from './pages/MyAppointments'
 import Appointment from './pages/Appointment'
 import Navbar from './components/Navbar'
 import SignUp from './pages/SignUp'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const App = () => {
   return (
-    <div className="mx-4 sm:mx-[10%]">
-    <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/doctors" element={<Doctors />} />
-        <Route path="/doctors/:speciality" element={<Doctors />} />
-        <Route path="login" element={<Login />} />
-        <Route path = '/signup' element={<SignUp/>} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/my-profile" element={<MyProfile />} />
-        <Route path="/my-appointments" element={<MyAppointments />} />
-        <Route path ="appointment/:docID" element ={<Appointment />}/>
-        <Route path ="/doctors/:speciality/appointment/:docID" element ={<Appointment />}/>
-        <Route path ="/doctors/appointment/:docID" element ={<Appointment />}/>
-      </Routes>
-    </div>
+    <>
+      <ToastContainer />
+      <div className="mx-4 sm:mx-[2%]">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:speciality" element={<Doctors />} />
+          <Route path="/login" element={<Login />} />
+          <Route path='/signup' element={<SignUp />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/my-profile" element={<MyProfile />} />
+          <Route path="/my-appointments" element={<MyAppointments />} />
+          <Route path="appointment/:docID" element={<Appointment />} />
+          <Route path="/doctors/:speciality/appointment/:docID" element={<Appointment />} />
+          <Route path="/doctors/appointment/:docID" element={<Appointment />} />
+        </Routes>
+      </div>
+    </>
   )
 }
 
